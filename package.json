@@ -12,6 +12,7 @@
   "type": "commonjs",
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.883.0",
+    "@aws-sdk/core": "^3.883.0",
     "@aws-sdk/lib-dynamodb": "^3.883.0",
     "bcrypt": "^6.0.0",
     "express": "^5.1.0",

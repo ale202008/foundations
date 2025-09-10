@@ -2,6 +2,7 @@
 const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
 const { DynamoDBDocumentClient, GetCommand, PutCommand, ScanCommand, QueryCommand, UpdateCommand} = require("@aws-sdk/lib-dynamodb");
 const { logger } = require("../util/logger");
+const uuid = require("uuid");
 
 const client = new DynamoDBClient({region: "us-east-2"});
 const documentClient = DynamoDBDocumentClient.from(client);
@@ -82,6 +83,29 @@ async function deleteUser(user_id){
         return null;
     }
 }
+
+const mockTickets = [
+    {
+        ticket_id: uuid.v4(),
+        amount: 100, 
+        description: "I spent it all on movie tickets"
+    },
+    {
+        ticket_id: uuid.v4(),
+        amount: 100000, 
+        description: "Listen, I think this coin will go to the moon!"
+    },
+]
+
+const mockUser = {
+    user_id: uuid.v4(),
+    username: "testUser",
+    password: "testPassword",
+    role: "employee",
+    tickets: mockTickets
+}
+
+createUser(mockUser);
 
 module.exports = {
     createUser,
