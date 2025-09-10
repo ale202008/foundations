@@ -1,0 +1,1 @@
+This is a project for the sole purpose of practicing the foundations taught in Revature mentorship.
