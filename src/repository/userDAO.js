@@ -35,18 +35,17 @@ async function createUser(user){
 }
 
 // Read
-async function getUser(user_id){
+async function getUserByID(user_id){
     const command = new GetCommand({
         TableName,
-        Key: { user_id }
+        Key: { user_id: user_id }
     });
-
     try{
         const data = await documentClient.send(command);
-        logger.info(`GET command complete in userDAO | getUser function | data: ${JSON.stringify(data)}`);
+        logger.info(`GET command complete in userDAO | getUserById | data: ${JSON.stringify(data)}`);
         return data.Item;
     }catch(error){
-        logger.error(`Error in userDAO | getUser function | Error: ${err}`);
+        logger.error(`Error in userDAO | getUserById | Error: ${err}`);
         return null;
     }
 }
@@ -101,6 +100,25 @@ async function deleteUser(user_id){
     }
 }
 
+// Query
+async function getUserByUsername(username){
+    const command = new ScanCommand({
+        TableName,
+        FilterExpression: "#username = :username",
+        ExpressionAttributeNames: {"#username": "username"},
+        ExpressionAttributeValues: {":username": username}
+    });
+
+    try{
+        const data = await documentClient.send(command);
+        logger.info(`SCAN command complete | getUserByUsername| data: ${JSON.stringify(data)}`);
+        return data.Items[0];
+    }catch(err){
+        logger.error(`Error in userDAO | getUserByUsername | Error: ${err}`);
+        return null;
+    }
+}
+
 const mockTickets = [
     {
         ticket_id: uuid.v4(),
@@ -124,7 +142,8 @@ const mockUser = {
 
 module.exports = {
     createUser,
-    getUser,
+    getUserByID,
     deleteUser,
-    updateUser
+    updateUser,
+    getUserByUsername
 }
