@@ -20,11 +20,11 @@ async function createUser(user){
 
     try{
         const data = await documentClient.send(command);
-        logger.info(`PUT command complete - createUser function - line22: ${JSON.stringify(data)}`);
+        logger.info(`PUT command complete in userDAO | createUser function | data: ${JSON.stringify(data)}`);
         return data;
     }
     catch (err) {
-        logger.error(`Error in userDAO - createUser function - line24: ${err}`)
+        logger.error(`Error in userDAO | createUser function | Error: ${err}`);
         return null;
     }
 }
@@ -38,10 +38,10 @@ async function getUser(user_id){
 
     try{
         const data = await documentClient.send(command);
-        console.log(data.Item);
+        logger.info(`GET command complete in userDAO | getUser function | data: ${JSON.stringify(data)}`);
         return data.Item;
     }catch(error){
-        console.error(error);
+        logger.error(`Error in userDAO | getUser function | Error: ${err}`);
         return null;
     }
 }
@@ -66,6 +66,17 @@ async function updateUser(user){
         },
         ReturnValues: "ALL_NEW"  
     }
+    const command = new UpdateCommand(params)
+    
+    try {
+        const result = await documentClient.send(command);
+        logger.info(`UPDATE command complete in userDAO | updateUser function | data: ${result}`);
+        return result;
+    }
+    catch (err){
+        logger.error(`Error in userDAO | updateUser function | Error: ${err}`)
+        return null;
+    }
 }
 
 // Delete
@@ -77,9 +88,10 @@ async function deleteUser(user_id){
 
     try{
         await documentClient.send(command);
+        logger.info(`DELETE command complete in userDAO | deleteUser function | Deleted user: ${user_id}`);
         return user_id;
-    }catch(error){
-        console.error(error);
+    }catch(err){
+        logger.info(`Error in userDAO | deleteUser function | Error: ${err}`);
         return null;
     }
 }
@@ -96,7 +108,6 @@ const mockTickets = [
         description: "Listen, I think this coin will go to the moon!"
     },
 ]
-
 const mockUser = {
     user_id: uuid.v4(),
     username: "testUser",
@@ -104,8 +115,7 @@ const mockUser = {
     role: "employee",
     tickets: mockTickets
 }
-
-createUser(mockUser);
+// createUser(mockUser);
 
 module.exports = {
     createUser,
