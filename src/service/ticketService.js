@@ -6,9 +6,13 @@ const ticketDAO = require("../repository/ticketDAO");
 // util imports
 const { logger } = require("../util/logger");
 const { decodeJWT } = require("../util/jwt");
+const { fs } = require("fs");
 
 
 // Create ticket
+// args: ticket, token
+// return: null on invalid ticket or token
+// return: data of ticket upon success
 async function createTicket(ticket, token){
     if (!validifyTicket) {
         logger.error(`Invalid ticket: ${ticket}`);
@@ -19,9 +23,10 @@ async function createTicket(ticket, token){
         return null;
     }
 
-    let decodedUser = await decodeJWT(token);
-    const user = await userDAO.getUserByID(decodedUser.user_id);
-    const data = await ticketDAO.createTicket(ticket, getUser);
+    ticket["pending"] = true;
+    const decodedUser = await decodeJWT(token);
+    const user = await userDAO.getUserByID(decodedUser.id);
+    const data = await ticketDAO.createTicket(ticket, user);
     
     if (data){
         logger.info(`Successful ticket creation | ticketService | createTicket | Ticket ${ticket}`);
@@ -36,11 +41,19 @@ async function createTicket(ticket, token){
 
 // validifiy ticket requiremnest
 // - Amount, Description
+// args: ticket
+// return: true if both amount and description exist, false if not
 function validifyTicket(ticket){
-    return (!ticket.amount || !ticket.description)
+    return (!ticket.amount.length > 0 || !ticket.description.length > 0)
 }
 
 // validify user is an employee
+// args: user
+// return: true if user is an employee, false if not
 function validifyUserIsEmployee(user){
     return (user.role.toLowerCase() == "employee")
+}
+
+module.exports = {
+    createTicket,
 }

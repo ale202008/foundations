@@ -1,8 +1,11 @@
+// Package imports
 const express = require("express");
 const app = express();
-const { logger, loggerMiddleware } = require("./util/logger");
-const { authenticateToken } = require("./util/jwt");
+// Util imports
+const { loggerMiddleware } = require("./util/logger");
+// Route imports
 const userRoutes = require("./routes/userRoutes");
+const ticketRoutes = require("./routes/ticketRoutes");
 
 const PORT = 3000;
 
@@ -14,11 +17,15 @@ app.use(loggerMiddleware);
 // We hook the userRoutes to "/"
 app.use("/", userRoutes);
 
-// Base get request
-// app.get("/", (req, res) =>{
-//     res.send("Please enter an username and password.");
-// })
+// Hook the ticketRoutes to "/"
+app.use("/", ticketRoutes);
 
+// Base get request
+app.get("/", (req, res) =>{
+    res.send("Please enter an username and password.");
+})
+
+// Server listening on port
 app.listen(PORT, () => {
     console.log(`Server is listening on http://localhost:${PORT}`);
 })

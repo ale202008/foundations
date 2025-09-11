@@ -1,8 +1,12 @@
+// Package Imports
 const express = require("express");
-const userService = require("../service/userService")
-const { loggerMiddleware } = require('../util/logger');
 const jwt = require('jsonwebtoken');
-const { authenticateToken } = require("../util/jwt");
+// Service imports
+const userService = require("../service/userService");
+const ticketService = require("../service/ticketService")
+// Util imports
+const { loggerMiddleware } = require('../util/logger');
+
 
 const app = express();
 

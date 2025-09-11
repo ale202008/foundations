@@ -8,7 +8,6 @@ async function authenticateToken(req, res, next){
 
     const authHeader = req.headers["authorization"];
     const token = authHeader && authHeader.split(" ")[1];
-    console.log(token);
 
     if(!token){
         res.status(400).json({message: "forbidden access"});

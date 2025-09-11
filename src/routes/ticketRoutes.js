@@ -2,25 +2,16 @@
 // Package Imports
 const express = require("express");
 // Controller Imports
-const userController = require("../controller/userController");
+const ticketController = require("../controller/ticketController");
 // Util imports
 const { authenticateToken } = require("../util/jwt");
 
 const router = express.Router();
 
-// Estabishes register requests to register in controller
-router.post("/register", userController.Register);
-
-// Establishes post login requests to controller
-router.post("/login", userController.Login);
-
 // Uses authenticateToken for URLs below declaration
 router.use(authenticateToken);
 
-// Protected route
-router.post("/protected", userController.Protected)
-
-
-
+// Protected route -> Employee user trying to create a ticket.
+router.post("/submitticket", ticketController.SubmitTicket)
 
 module.exports = router;

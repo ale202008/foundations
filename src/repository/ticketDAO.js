@@ -16,7 +16,6 @@ const TableName = "foundations_table";
 
 // CRUD
 async function createTicket(ticket, user){
-    console.log(user.user_id)
     const params = {
         TableName,
         Key: { user_id: user.user_id },
@@ -41,8 +40,6 @@ async function createTicket(ticket, user){
         logger.error(`Error in ticketDAO | createTicket | Error: ${err}`);
         return null;
     }
-
-
 }
 
 module.exports = {
