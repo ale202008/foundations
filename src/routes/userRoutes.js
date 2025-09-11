@@ -1,6 +1,7 @@
 // Shoutout to Christopher for suggesting to put routes separate from controller
 const express = require("express");
 const userController = require("../controller/userController");
+const { authenticateToken } = require("../util/jwt");
 
 const router = express.Router();
 
@@ -12,8 +13,8 @@ router.post("/login", userController.Login);
 
 // Base URL for after login
 router.post("/protected", userController.Protected)
-// app.get("/protected", authenticateToken, (req, res) => {
-//     res.json({message: "Accessed Protected Route", user: req.user});
-// });
+
+// Uses authenticateToken for URLs below declaration
+router.use(authenticateToken);
 
 module.exports = router;
