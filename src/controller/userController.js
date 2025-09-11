@@ -30,7 +30,9 @@ const Register = async (req, res) => {
 // Login Route -> Service
 const Login = async (req, res) => {
     const { username, password } = req.body;
-}
+    const data = userService.validateUserLogin(username, password)
+    
+}   
 
 module.exports = {
     Register,
