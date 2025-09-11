@@ -1,11 +1,14 @@
 const express = require("express");
 const userService = require("../service/userService")
 const { loggerMiddleware } = require('../util/logger');
+const jwt = require("../util/jwt")
 
 const app = express();
 
+const secretKey = "my-secret-key";
+
 app.use(express.json());
-app.use(loggerMiddleware);
+app.use(loggerMiddleware);  
 
 // Register route -> Service
 const Register = async (req, res) => {
@@ -31,7 +34,20 @@ const Register = async (req, res) => {
 const Login = async (req, res) => {
     const { username, password } = req.body;
     const data = userService.validateUserLogin(username, password)
-    
+    if (data){
+        const token = {
+            id: data.user_id,
+            username
+        }
+        secretKey,
+        {
+            expiresIn: "20m"
+        }
+        res.status(200).json({message:"You have logged in.", token})
+    }
+    else {
+        res.status(400).json({message:"Invalid login."})
+    }
 }   
 
 module.exports = {
