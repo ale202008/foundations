@@ -33,16 +33,18 @@ const Register = async (req, res) => {
 // Login Route -> Service
 const Login = async (req, res) => {
     const { username, password } = req.body;
-    const data = userService.validateUserLogin(username, password)
+    const data = await userService.validateUserLogin(username, password)
     if (data){
-        const token = {
-            id: data.user_id,
-            username
-        }
-        secretKey,
-        {
-            expiresIn: "20m"
-        }
+        const token = jwt.sign(
+            {
+                id: data.user_id,
+                username
+            },
+            secretKey,
+            {
+                expiresIn: "20m"
+            }
+        );
         res.status(200).json({message:"You have logged in.", token})
     }
     else {
@@ -52,4 +54,5 @@ const Login = async (req, res) => {
 
 module.exports = {
     Register,
+    Login,
 }

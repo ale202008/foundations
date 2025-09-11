@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "test": "jest --collectCoverage",
-    "start": "node app.js"
+    "start": "node src/app.js"
   },
   "keywords": [],
   "author": "",

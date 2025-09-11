@@ -52,7 +52,7 @@ async function validateNewUser(user){
 // Validates user login information
 async function validateUserLogin(username, password){
     const getUser = await userDAO.getUserByUsername(username);
-    if (getUser && (await bcrypt.compare(password, user.password))){
+    if (getUser && (await bcrypt.compare(password, getUser.password))){
         logger.info(`User ${username} successfully logged in.`);
         return getUser;
     }
