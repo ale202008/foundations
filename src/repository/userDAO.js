@@ -25,11 +25,11 @@ async function createUser(user){
 
     try{
         const data = await documentClient.send(command);
-        logger.info(`PUT command complete in userDAO | createUser function | data: ${JSON.stringify(data)}`);
+        logger.info(`PUT command complete in userDAO | createUser | data: ${JSON.stringify(data)}`);
         return data;
     }
     catch (err) {
-        logger.error(`Error in userDAO | createUser function | Error: ${err}`);
+        logger.error(`Error in userDAO | createUser | Error: ${err}`);
         return null;
     }
 }
@@ -74,11 +74,11 @@ async function updateUser(user){
     
     try {
         const result = await documentClient.send(command);
-        logger.info(`UPDATE command complete in userDAO | updateUser function | data: ${result}`);
+        logger.info(`UPDATE command complete in userDAO | updateUser | data: ${result}`);
         return result;
     }
     catch (err){
-        logger.error(`Error in userDAO | updateUser function | Error: ${err}`)
+        logger.error(`Error in userDAO | updateUser | Error: ${err}`)
         return null;
     }
 }
@@ -92,10 +92,10 @@ async function deleteUser(user_id){
 
     try{
         await documentClient.send(command);
-        logger.info(`DELETE command complete in userDAO | deleteUser function | Deleted user: ${user_id}`);
+        logger.info(`DELETE command complete in userDAO | deleteUser | Deleted user: ${user_id}`);
         return user_id;
     }catch(err){
-        logger.info(`Error in userDAO | deleteUser function | Error: ${err}`);
+        logger.info(`Error in userDAO | deleteUser | Error: ${err}`);
         return null;
     }
 }
@@ -111,7 +111,7 @@ async function getUserByUsername(username){
 
     try{
         const data = await documentClient.send(command);
-        logger.info(`SCAN command complete | getUserByUsername| data: ${JSON.stringify(data)}`);
+        logger.info(`SCAN command complete | getUserByUsername | data: ${JSON.stringify(data)}`);
         return data.Items[0];
     }catch(err){
         logger.error(`Error in userDAO | getUserByUsername | Error: ${err}`);
@@ -119,25 +119,6 @@ async function getUserByUsername(username){
     }
 }
 
-const mockTickets = [
-    {
-        ticket_id: uuid.v4(),
-        amount: 100, 
-        description: "I spent it all on movie tickets"
-    },
-    {
-        ticket_id: uuid.v4(),
-        amount: 100000, 
-        description: "Listen, I think this coin will go to the moon!"
-    },
-]
-const mockUser = {
-    user_id: uuid.v4(),
-    username: "testUser",
-    password: "testPassword",
-    role: "employee",
-    tickets: mockTickets
-}
 // createUser(mockUser);
 
 module.exports = {

@@ -19,10 +19,11 @@ async function createUser(user){
             user_id: uuid.v4(),
             username: user.username,
             password: password,
-            role: user.role || "employee"
+            role: user.role
         };
         const data = await userDAO.createUser(newUser);
         logger.info(`Created new user in userService | createUser | data: ${data}`)
+        return data
     }
     else{
         logger.error(`Failed to validate user credentials. User: ${user}`);
@@ -31,26 +32,7 @@ async function createUser(user){
 
 }
 
-const mockTickets = [
-    {
-        ticket_id: uuid.v4(),
-        amount: 100, 
-        description: "I spent it all on movie tickets"
-    },
-    {
-        ticket_id: uuid.v4(),
-        amount: 100000, 
-        description: "Listen, I think this coin will go to the moon!"
-    },
-]
-const mockUser = {
-    user_id: uuid.v4(),
-    username: "testUser3",
-    password: "testPassword",
-    role: "financemanager",
-    tickets: mockTickets
-}
-createUser(mockUser);
+// createUser(mockUser);
 
 // Validates user credentials
 //      - Username must not be blank
@@ -66,4 +48,10 @@ function validateNewUserCredentials(user){
 async function validateNewUser(user){
     const getUser = await userDAO.getUserByUsername(user.username);
     return !!getUser;
+}
+
+module.exports = {
+    createUser,
+    validateNewUser,
+    validateNewUserCredentials
 }
