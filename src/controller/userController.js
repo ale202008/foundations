@@ -1,7 +1,7 @@
 const express = require("express");
 const userService = require("../service/userService")
 const { loggerMiddleware } = require('../util/logger');
-const jwt = require("../util/jwt")
+const jwt = require('jsonwebtoken');
 
 const app = express();
 
