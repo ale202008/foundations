@@ -121,7 +121,7 @@ async function getUserByUsername(username){
 
     try{
         const data = await documentClient.send(command);
-        logger.info(`SCAN command complete | getUserByUsername | data: ${JSON.stringify(data)}`);
+        logger.info(`SCAN command complete | userDAO | getUserByUsername | data: ${JSON.stringify(data)}`);
         return data.Items[0];
     }catch(err){
         logger.error(`Error in userDAO | getUserByUsername | Error: ${err}`);

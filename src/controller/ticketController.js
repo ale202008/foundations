@@ -19,9 +19,12 @@ const SubmitTicket = async (req, res) => {
     }
 }
 
-// Get Ticket Route -> Service
-
+// View Ticket Route -> Service
+const ViewTickets = async (req, res) => {
+    
+}
 
 module.exports = {
     SubmitTicket,
+    ViewTickets,
 }

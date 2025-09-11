@@ -14,16 +14,16 @@ app.use(express.json());
 // Use Logger to log request
 app.use(loggerMiddleware);
 
+// Base get request
+app.get("/", (req, res) =>{
+    res.send("Please enter an username and password.");
+})
+
 // We hook the userRoutes to "/"
 app.use("/", userRoutes);
 
 // Hook the ticketRoutes to "/"
 app.use("/", ticketRoutes);
-
-// Base get request
-app.get("/", (req, res) =>{
-    res.send("Please enter an username and password.");
-})
 
 // Server listening on port
 app.listen(PORT, () => {

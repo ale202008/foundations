@@ -38,17 +38,29 @@ async function createTicket(ticket){
 // getTicketByUserId function
 // args: user_id
 // return: list of all user's tickets
-async function getTicketByUserId(user_id){
-
+async function getTicketsByUserId(user_id){
+    const command = new QueryCommand({
+        TableName,
+        KeyConditionExpression: "user_id = :user_id",
+        ExpressionAttributeValues: {
+            ":user_id": user_id
+        }
+    });
+    
+    try {
+        const data = await documentClient.send(command);
+        logger.info(`QUERY command complete | ticketDAO | getTicketsByUserId | data ${JSON.stringify(data)}`);
+        return null;
+    }
+    catch (err){
+        logger.error(`Error in tickDAO | getTicketsByUserId | Error ${err}`);
+        return null;
+    };
 }
 
 // getAllPendingTickets function
 // args: none
 // return: list of all currently pending tickets
-
-// getPreviousTickets function
-// args: user_id
-// return: list of all user's previously answered tickets
 
 // approveTicket
 // args: ticket
