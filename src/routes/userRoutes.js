@@ -7,4 +7,7 @@ const router = express.Router();
 // Estabishes register requests to register in controller
 router.post("/register", userController.Register);
 
+// Establishes post login requests to controller
+router.post("/login", userController.Login);
+
 module.exports = router;

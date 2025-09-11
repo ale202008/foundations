@@ -12,7 +12,7 @@ app.use(express.json());
 app.use(loggerMiddleware);
 
 // We hook the userRoutes to "/"
-app.use("/", userRoutes)
+app.use("/", userRoutes);
 
 // Base get request
 app.get("/", (req, res) =>{

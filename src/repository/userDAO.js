@@ -84,7 +84,7 @@ async function updateUser(user){
 }
 
 // Delete
-async function deleteUser(user_id){
+async function deleteUserByID(user_id){
     const command = new DeleteCommand({
         TableName,
         Key: { user_id }
@@ -124,7 +124,7 @@ async function getUserByUsername(username){
 module.exports = {
     createUser,
     getUserByID,
-    deleteUser,
+    deleteUserByID,
     updateUser,
     getUserByUsername
 }

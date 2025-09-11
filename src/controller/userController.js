@@ -9,7 +9,7 @@ app.use(loggerMiddleware);
 
 // Register route -> Service
 const Register = async (req, res) => {
-    const {username, password} = req.body;
+    const { username, password } = req.body;
     const role = req.body || "employee";
     const newUser = {
         username: username,
@@ -25,6 +25,11 @@ const Register = async (req, res) => {
         res.status(400).json({message:`Failed to create user`, data: req.body});
     }
 
+}
+
+// Login Route -> Service
+const Login = async (req, res) => {
+    const { username, password } = req.body;
 }
 
 module.exports = {
