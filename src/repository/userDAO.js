@@ -1,4 +1,4 @@
-// boilerplate imports
+// Package imports
 const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
 const { DynamoDBDocumentClient, 
         GetCommand,
@@ -6,8 +6,8 @@ const { DynamoDBDocumentClient,
         ScanCommand, 
         QueryCommand, 
         UpdateCommand } = require("@aws-sdk/lib-dynamodb");
+// Util imports
 const { logger } = require("../util/logger");
-const uuid = require("uuid");
 
 const client = new DynamoDBClient({region: "us-east-2"});
 const documentClient = DynamoDBDocumentClient.from(client);

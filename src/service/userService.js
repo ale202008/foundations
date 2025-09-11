@@ -1,7 +1,9 @@
-const userDAO = require("../repository/userDAO");
-const bcrypt = require("bcrypt");
-const { logger } = require("../util/logger");
+// Package imports
 const uuid = require("uuid");
+const bcrypt = require("bcrypt");
+// Util imports
+const { logger } = require("../util/logger");
+const userDAO = require("../repository/userDAO");
 
 // Sends request to userDAO to create new user after validifying and
 // processing user credentials

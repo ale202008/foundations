@@ -20,7 +20,4 @@ router.use(authenticateToken);
 // Protected route
 router.post("/protected", userController.Protected)
 
-
-
-
 module.exports = router;
