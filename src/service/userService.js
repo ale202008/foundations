@@ -5,6 +5,8 @@ const uuid = require("uuid");
 
 // Sends request to userDAO to create new user after validifying and
 // processing user credentials
+// args: user
+// returns: data on success, null if not
 async function createUser(user){
     if (await validateNewUser(user)){
         logger.error(`Username already exists. User: ${user}`);
@@ -32,11 +34,11 @@ async function createUser(user){
 
 }
 
-// createUser(mockUser);
-
 // Validates user credentials
 //      - Username must not be blank
 //      - Password must not be blank
+// args: user
+// return: bool if username and password length are greater than 0
 function validateNewUserCredentials(user){
     const usernameBool = user.username.length > 0;
     const passwordBool = user.password.length > 0;
@@ -44,12 +46,16 @@ function validateNewUserCredentials(user){
 }
 
 // Validates that username is not in use
+// args: user
+// returns: getUser bool
 async function validateNewUser(user){
     const getUser = await userDAO.getUserByUsername(user.username);
     return !!getUser;
 }
 
 // Validates user login information
+// args: username, password
+// return: user login, null if not
 async function validateUserLogin(username, password){
     const getUser = await userDAO.getUserByUsername(username);
     if (getUser && (await bcrypt.compare(password, getUser.password))){

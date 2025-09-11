@@ -16,7 +16,9 @@ const TableName = "foundations_table";
 
 // CRUD
 
-// Create
+// Create user function
+// args: user
+// return: data on success, null if not
 async function createUser(user){
     const command = new PutCommand({
         TableName,
@@ -34,7 +36,9 @@ async function createUser(user){
     }
 }
 
-// Read
+// Read function
+// args: user_id
+// return: data on success, null if not
 async function getUserByID(user_id){
     const command = new GetCommand({
         TableName,
@@ -50,7 +54,9 @@ async function getUserByID(user_id){
     }
 }
 
-// Update
+// Update function
+// args: user
+// return: data on success, null if not
 async function updateUser(user){
     const params = {
         TableName,
@@ -83,7 +89,9 @@ async function updateUser(user){
     }
 }
 
-// Delete
+// Delete function
+// args: user_id
+// return: user_id on success, null if not
 async function deleteUserByID(user_id){
     const command = new DeleteCommand({
         TableName,
@@ -100,7 +108,9 @@ async function deleteUserByID(user_id){
     }
 }
 
-// Query
+// Query function
+// args: username
+// return: data on success, null if not
 async function getUserByUsername(username){
     const command = new ScanCommand({
         TableName,
@@ -119,7 +129,6 @@ async function getUserByUsername(username){
     }
 }
 
-// createUser(mockUser);
 
 module.exports = {
     createUser,
