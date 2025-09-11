@@ -19,11 +19,6 @@ app.get("/", (req, res) =>{
     res.send("Please enter an username and password.");
 })
 
-// Base URL for after login
-app.get("/protected", authenticateToken, (req, res) => {
-    res.json({message: "Accessed Protected Route", user: req.user});
-})
-
 app.listen(PORT, () => {
     console.log(`Server is listening on http://localhost:${PORT}`);
 })

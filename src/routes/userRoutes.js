@@ -11,8 +11,9 @@ router.post("/register", userController.Register);
 router.post("/login", userController.Login);
 
 // Base URL for after login
-app.get("/protected", authenticateToken, (req, res) => {
-    res.json({message: "Accessed Protected Route", user: req.user});
-})
+router.post("/protected", userController.Protected)
+// app.get("/protected", authenticateToken, (req, res) => {
+//     res.json({message: "Accessed Protected Route", user: req.user});
+// });
 
 module.exports = router;

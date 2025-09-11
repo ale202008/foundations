@@ -2,6 +2,7 @@ const express = require("express");
 const userService = require("../service/userService")
 const { loggerMiddleware } = require('../util/logger');
 const jwt = require('jsonwebtoken');
+const { authenticateToken } = require("../util/jwt");
 
 const app = express();
 
@@ -50,9 +51,14 @@ const Login = async (req, res) => {
     else {
         res.status(400).json({message:"Invalid login."})
     }
-}   
+}
+
+const Protected = (authenticateToken, async (req, res) => {
+    res.json({message: "Accessed Protected Route", user: req.user});
+})
 
 module.exports = {
     Register,
     Login,
+    Protected,
 }

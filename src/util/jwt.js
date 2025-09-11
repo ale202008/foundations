@@ -15,8 +15,10 @@ async function authenticateToken(req, res, next){
         const user = await decodeJWT(token);
         if(user){
             req.user = user; // You generally should not modify the incoming req
+            logger.info(`Successful access protected route.`)
             next();
         }else{
+            logger.error(`Invalid JWT Token.`)
             res.status(400).json({message: "Bad JWT"});
         }
     }
