@@ -29,14 +29,36 @@ async function createTicket(ticket, token){
     const data = await ticketDAO.createTicket(ticket);
     
     if (data){
-        logger.info(`Successful ticket creation | ticketService | createTicket | Ticket ${ticket}`);
-        return data;
+        logger.info(`Successful ticket creation | ticketService | createTicket | Ticket: ${ticket}`);
+        return ticket;
     }
     else {
         logger.error(`Failed to create ticket | ticketService | createTicket`);
         return null;
     }
 
+}
+
+// getTicketsByUserId function
+// Sends request to repository to get all tickets made by user
+// if user is employee, return all user's ticket
+// if user is manager, send all pending tickets
+// args: user_id
+// return: data containing all user tickets
+async function getTicketsByUserId(token){
+    const decodedUser = await decodeJWT(token);
+    const user_id = decodedUser.id;
+
+    const data = await ticketDAO.getTicketsByUserId(user_id)
+
+    if (data){
+        logger.info(`Success | ticketService | getTicketsByUserId | Tickets: ${data.Items}`);
+        return data;
+    }
+    else {
+        logger.error(`Failed | ticketService | getTicketsByUserId`);
+        return null;
+    }
 }
 
 // validifiy ticket requiremnest
@@ -56,4 +78,5 @@ function validifyUserIsEmployee(user){
 
 module.exports = {
     createTicket,
+    getTicketsByUserId,
 }

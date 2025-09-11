@@ -26,7 +26,7 @@ async function createTicket(ticket){
 
     try{
         const data = await documentClient.send(command);
-        logger.info(`UPDATE command complete | ticketDAO | createTicket | data: ${data}`);
+        logger.info(`UPDATE command complete | ticketDAO | createTicket | ticket: ${ticket}`);
         return data;
     }
     catch (err) {
@@ -49,8 +49,8 @@ async function getTicketsByUserId(user_id){
     
     try {
         const data = await documentClient.send(command);
-        logger.info(`QUERY command complete | ticketDAO | getTicketsByUserId | data ${JSON.stringify(data)}`);
-        return null;
+        logger.info(`QUERY command complete | ticketDAO | getTicketsByUserId | data ${JSON.stringify(data.Items)}`);
+        return data;
     }
     catch (err){
         logger.error(`Error in tickDAO | getTicketsByUserId | Error ${err}`);
@@ -72,4 +72,5 @@ async function getTicketsByUserId(user_id){
 
 module.exports = {
     createTicket,
+    getTicketsByUserId,
 }

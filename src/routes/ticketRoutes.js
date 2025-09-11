@@ -17,6 +17,6 @@ router.post("/submitticket", ticketController.SubmitTicket)
 // Protected route -> Two options
 // If employee -> See current pending tickets made by user
 // If manager -> See all currently pending tickets
-router.post("/viewtickets", ticketController.ViewTickets);
+router.get("/viewtickets", ticketController.ViewTickets);
 
 module.exports = router;

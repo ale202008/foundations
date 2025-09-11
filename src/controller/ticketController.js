@@ -1,18 +1,15 @@
-// Package Imports
-const express = require("express");
-const jwt = require('jsonwebtoken');
 // Service imports
-const userService = require("../service/userService");
 const ticketService = require("../service/ticketService")
 
 // Submit Ticket Route -> Service
 const SubmitTicket = async (req, res) => {
     const authHeader = req.headers["authorization"];
     const token = authHeader && authHeader.split(" ")[1];
+
     const data = await ticketService.createTicket(req.body, token);
     
     if (data){
-        res.status(200).json({message: `Created new ticket for user: ${JSON.stringify(data)}`});
+        res.status(200).json({message: `Created new ticket for user: `, ticket: data});
     }
     else {
         res.status(400).json({message:`Failed to create new ticket`, data: req.body});
@@ -21,7 +18,17 @@ const SubmitTicket = async (req, res) => {
 
 // View Ticket Route -> Service
 const ViewTickets = async (req, res) => {
-    
+    const authHeader = req.headers["authorization"];
+    const token = authHeader && authHeader.split(" ")[1];
+
+    const data = await ticketService.getTicketsByUserId(token);
+
+    if (data){
+        res.status(200).json({message: `Your tickets: `, tickets: data.Items});
+    }
+    else {
+        res.status(400).json({message:`Failed to retrieve tickets.`, data: req.body});
+    }
 }
 
 module.exports = {

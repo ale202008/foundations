@@ -1,19 +1,9 @@
 // Package Imports
-const express = require("express");
 const jwt = require('jsonwebtoken');
 // Service imports
 const userService = require("../service/userService");
-const ticketService = require("../service/ticketService")
-// Util imports
-const { loggerMiddleware } = require('../util/logger');
-
-
-const app = express();
 
 const secretKey = "my-secret-key";
-
-app.use(express.json());
-app.use(loggerMiddleware);  
 
 // Register route -> Service
 const Register = async (req, res) => {
