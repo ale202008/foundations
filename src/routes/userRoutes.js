@@ -10,4 +10,9 @@ router.post("/register", userController.Register);
 // Establishes post login requests to controller
 router.post("/login", userController.Login);
 
+// Base URL for after login
+app.get("/protected", authenticateToken, (req, res) => {
+    res.json({message: "Accessed Protected Route", user: req.user});
+})
+
 module.exports = router;
