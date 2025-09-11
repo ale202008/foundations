@@ -54,7 +54,7 @@ async function getUserByID(user_id){
 async function updateUser(user){
     const params = {
         TableName,
-        Key: {user_id: user.user_id},
+        Key: { user_id: user.user_id },
         UpdateExpression: "SET #username = :username, #password = :password, #role = :role, #tickets = :tickets",
         ExpressionAttributeNames: {
             "#username": "username",
@@ -73,9 +73,9 @@ async function updateUser(user){
     const command = new UpdateCommand(params)
     
     try {
-        const result = await documentClient.send(command);
-        logger.info(`UPDATE command complete in userDAO | updateUser | data: ${result}`);
-        return result;
+        const data = await documentClient.send(command);
+        logger.info(`UPDATE command complete in userDAO | updateUser | data: ${data}`);
+        return data;
     }
     catch (err){
         logger.error(`Error in userDAO | updateUser | Error: ${err}`)

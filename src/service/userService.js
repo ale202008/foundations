@@ -19,7 +19,7 @@ async function createUser(user){
             user_id: uuid.v4(),
             username: user.username,
             password: password,
-            role: user.role
+            role: user.role || "employee"
         };
         const data = await userDAO.createUser(newUser);
         logger.info(`Created new user in userService | createUser | data: ${data}`)

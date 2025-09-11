@@ -13,15 +13,7 @@ app.use(loggerMiddleware);
 
 // Register route -> Service
 const Register = async (req, res) => {
-    const { username, password } = req.body;
-    const role = req.body || "employee";
-    const newUser = {
-        username: username,
-        password: password,
-        role: role
-    }
-
-    const data = await userService.createUser(newUser);
+    const data = await userService.createUser(req.body);
     if (data){
         res.status(200).json({message: `Created user: ${JSON.stringify(data)}`});
     }
