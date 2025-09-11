@@ -29,12 +29,13 @@ async function decodeJWT(token){
     try{
         const user = await jwt.verify(token, secretKey);
         return user;
-    }catch(error){
+    }catch(err){
         logger.error(`Error in decoding token: ${err}`);
         return null;
     }
 }
 
 module.exports = {
-    authenticateToken
+    authenticateToken,
+    decodeJWT
 }

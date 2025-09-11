@@ -5,13 +5,32 @@ const userDAO = require("../repository/userDAO");
 const ticketDAO = require("../repository/ticketDAO");
 // util imports
 const { logger } = require("../util/logger");
-const decodeJWT = require("../util/jwt");
+const { decodeJWT } = require("../util/jwt");
 
 
 // Create ticket
-async function createTicket(ticket, user){
-    const user = decodeJWT(user);
-    const user = userDAO.getUserByID(user_id)
+async function createTicket(ticket, token){
+    if (!validifyTicket) {
+        logger.error(`Invalid ticket: ${ticket}`);
+        return null;
+    }
+    else if (!validifyUserIsEmployee){
+        logger.error(`User is not an employee.`);
+        return null;
+    }
+
+    let decodedUser = await decodeJWT(token);
+    const user = await userDAO.getUserByID(decodedUser.user_id);
+    const data = await ticketDAO.createTicket(ticket, getUser);
+    
+    if (data){
+        logger.info(`Successful ticket creation | ticketService | createTicket | Ticket ${ticket}`);
+        return data;
+    }
+    else {
+        logger.error(`Failed to create ticket | ticketService | createTicket`);
+        return null;
+    }
 
 }
 

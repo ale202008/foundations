@@ -45,15 +45,6 @@ async function createTicket(ticket, user){
 
 }
 
-const mockUser = require("../util/mockUser")
-let user = mockUser;
-user.user_id = "62440cab-b109-4cf5-8261-f2ab1e57da11"
-user.password = "99999"
-user.Username = "Banana"
-const mockTicket = {
-        ticket_id: uuid.v4(),
-        amount: 100, 
-        description: "testticket"
-    }
-
-createTicket(mockTicket, user);
+module.exports = {
+    createTicket,
+}
