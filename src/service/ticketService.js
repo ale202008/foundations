@@ -6,7 +6,6 @@ const ticketDAO = require("../repository/ticketDAO");
 // util imports
 const { logger } = require("../util/logger");
 const { decodeJWT } = require("../util/jwt");
-const { fs } = require("fs");
 
 
 // Create ticket
@@ -23,10 +22,11 @@ async function createTicket(ticket, token){
         return null;
     }
 
+    ticket["ticket_id"] = uuid.v4();
     ticket["pending"] = true;
     const decodedUser = await decodeJWT(token);
-    const user = await userDAO.getUserByID(decodedUser.id);
-    const data = await ticketDAO.createTicket(ticket, user);
+    ticket["user_id"] = decodedUser.id;
+    const data = await ticketDAO.createTicket(ticket);
     
     if (data){
         logger.info(`Successful ticket creation | ticketService | createTicket | Ticket ${ticket}`);

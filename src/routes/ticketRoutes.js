@@ -14,4 +14,9 @@ router.use(authenticateToken);
 // Protected route -> Employee user trying to create a ticket.
 router.post("/submitticket", ticketController.SubmitTicket)
 
+// Protected route -> Two options
+// If employee -> See current pending tickets made by user
+// If manager -> See all currently pending tickets
+// router.post("/", ticketController.GetTickets);
+
 module.exports = router;
