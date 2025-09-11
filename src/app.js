@@ -15,9 +15,9 @@ app.use(loggerMiddleware);
 app.use("/", userRoutes);
 
 // Base get request
-app.get("/", (req, res) =>{
-    res.send("Please enter an username and password.");
-})
+// app.get("/", (req, res) =>{
+//     res.send("Please enter an username and password.");
+// })
 
 app.listen(PORT, () => {
     console.log(`Server is listening on http://localhost:${PORT}`);

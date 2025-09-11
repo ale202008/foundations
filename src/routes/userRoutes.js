@@ -11,10 +11,11 @@ router.post("/register", userController.Register);
 // Establishes post login requests to controller
 router.post("/login", userController.Login);
 
-// Base URL for after login
-router.post("/protected", userController.Protected)
-
 // Uses authenticateToken for URLs below declaration
 router.use(authenticateToken);
+
+// Protected route
+router.post("/protected", userController.Protected)
+
 
 module.exports = router;

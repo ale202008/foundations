@@ -46,9 +46,9 @@ const Login = async (req, res) => {
 }
 
 // Protected route -> The rest of the application
-const Protected = (authenticateToken, async (req, res) => {
+const Protected = async (req, res) => {
     res.json({message: "Accessed Protected Route", user: req.user});
-})
+}
 
 module.exports = {
     Register,
