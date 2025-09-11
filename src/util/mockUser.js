@@ -1,3 +1,5 @@
+const uuid = require("uuid");
+
 const mockTickets = [
     {
         ticket_id: uuid.v4(),
@@ -12,9 +14,8 @@ const mockTickets = [
 ]
 const mockUser = {
     user_id: uuid.v4(),
-    username: "testUser3",
-    password: "testPassword",
-    role: "financemanager",
+    username: "mockUser",
+    password: "mockPassword",
     tickets: mockTickets
 }
 
