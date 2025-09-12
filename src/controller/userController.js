@@ -7,7 +7,7 @@ const secretKey = "my-secret-key";
 
 // Register route -> Service
 const Register = async (req, res) => {
-    if (userService.validateNewUserCredentials(req.body)){
+    if (userService.validateUserCredentials(req.body)){
         const data = await userService.createUser(req.body);
         
         if (data){
@@ -17,7 +17,7 @@ const Register = async (req, res) => {
             res.status(400).json({message:`Username ${req.body.username} already exists.`});
         }
     }
-    else{
+    else {
         res.status(400).json({message:`Username or Password cannot be blank.`});  
     }
 
@@ -25,24 +25,31 @@ const Register = async (req, res) => {
 
 // Login Route -> Service
 const Login = async (req, res) => {
-    const { username, password } = req.body;
-    const data = await userService.validateUserLogin(username, password)
-    if (data){
-        const token = jwt.sign(
-            {
-                id: data.user_id,
-                username
-            },
-            secretKey,
-            {
-                expiresIn: "20m"
-            }
-        );
-        res.status(200).json({message:"You have logged in.", token})
+    if (userService.validateUserCredentials(req.body)){
+        const { username, password } = req.body;
+        const data = await userService.validateUserLogin(username, password)
+
+        if (data){
+            const token = jwt.sign(
+                {
+                    id: data.user_id,
+                    username
+                },
+                secretKey,
+                {
+                    expiresIn: "20m"
+                }
+            );
+            res.status(200).json({message:"You have logged in.", token})
+        }
+        else {
+            res.status(400).json({message:"Invalid username or password."})
+        }
     }
     else {
-        res.status(400).json({message:"Invalid login."})
+        res.status(400).json({message:`Username or Password cannot be blank.`});  
     }
+
 }
 
 // Protected route -> The rest of the application

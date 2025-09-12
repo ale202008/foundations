@@ -36,12 +36,29 @@ async function createUser(user){
 
 }
 
+// Validates user login information
+// args: username, password
+// return: user login, null if not
+async function validateUserLogin(username, password) {
+    const getUser = await userDAO.getUserByUsername(username);
+
+
+    if (getUser && (await bcrypt.compare(password, getUser.password))){
+        logger.info(`User ${username} successfully logged in.`);
+        return getUser;
+    }
+    else {
+        logger.info(`Invalid username or password`);
+        return null;
+    }
+}
+
 // Validates user credentials
 //      - Username must not be blank
 //      - Password must not be blank
 // args: user
 // return: bool if username and password length are greater than 0
-function validateNewUserCredentials(user){
+function validateUserCredentials(user){
     const usernameBool = user.username.length > 0;
     const passwordBool = user.password.length > 0;
     return (usernameBool && passwordBool);
@@ -55,24 +72,9 @@ async function validateNewUser(user){
     return !!getUser;
 }
 
-// Validates user login information
-// args: username, password
-// return: user login, null if not
-async function validateUserLogin(username, password){
-    const getUser = await userDAO.getUserByUsername(username);
-    if (getUser && (await bcrypt.compare(password, getUser.password))){
-        logger.info(`User ${username} successfully logged in.`);
-        return getUser;
-    }
-    else {
-        logger.info(`Username and password do not exist.`);
-        return null;
-    }
-}
-
 module.exports = {
     createUser,
     validateNewUser,
-    validateNewUserCredentials,
+    validateUserCredentials,
     validateUserLogin
 }
