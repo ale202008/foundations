@@ -88,7 +88,16 @@ async function getAllPendingTickets(token){
 // return: data
 async function approveTicket(ticket_id){
     const ticket = await getTicketById(ticket_id);
-    
+
+    if (ticket){
+        const data = await ticketDAO.approveTicket(ticket);
+        logger.info(`Success | ticketService | approveTicket | Ticket: ${data}`);
+        return data
+    }
+    else {
+        logger.error(`Failed | ticketService | approveTicket `);
+        return null;
+    }
 }
 
 // validifiy ticket requiremnest
@@ -131,5 +140,6 @@ module.exports = {
     getAllPendingTickets,
     validifyUserIsManager,
     validifyUserIsEmployee,
-    getUserByToken
+    getUserByToken,
+    approveTicket,
 }
