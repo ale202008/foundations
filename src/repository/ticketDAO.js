@@ -95,12 +95,14 @@ async function approveTicket(ticket){
             user_id: ticket.user_id,
             ticket_id: ticket.ticket_id
         },
-        UpdateExpression: "SET #approved = if_not_exists(#approved, :approved)",
+        UpdateExpression: "SET #approved = if_not_exists(#approved, :approved), #pending = :pending",
         ExpressionAttributeNames: {
             "#approved": "approved",
+            "#pending": "pending",
         },
         ExpressionAttributeValues: {
             ":approved": true,
+            ":pending": false,
         },
         ReturnValues: "ALL_NEW"
     };
@@ -128,12 +130,14 @@ async function denyTicket(ticket){
             user_id: ticket.user_id,
             ticket_id: ticket.ticket_id
         },
-        UpdateExpression: "SET #approved = if_not_exists(#approved, :approved)",
+        UpdateExpression: "SET #approved = if_not_exists(#approved, :approved), #pending = :pending",
         ExpressionAttributeNames: {
             "#approved": "approved",
+            "#pending": "pending",
         },
         ExpressionAttributeValues: {
             ":approved": false,
+            ":pending": false,
         },
         ReturnValues: "ALL_NEW"
     };
@@ -141,7 +145,7 @@ async function denyTicket(ticket){
 
     try {
         const data = documentClient.send(command);
-        logger.info(`UPDATE command complete | denyTicket | data: ${data.Items}`);
+        logger.info(`UPDATE command complete | denyTicket | data: ${data}`);
         return data
     }
     catch (err) {
