@@ -72,7 +72,7 @@ async function getAllPendingTickets(token){
 
     if (validifyUserIsManager(user)){
         const data = await ticketDAO.getAllPendingTickets();
-        logger.info(`Success | ticketService | getAllPendingTickets | Tickets: ${data.Items}`);
+        logger.info(`Success | ticketService | getAllPendingTickets | Tickets: ${JSON.stringify(data.Items)}`);
         return data;
     }
     else{
@@ -96,8 +96,8 @@ async function updateTicketStatus(ticket_id, status){
     const ticket = data.Items[0];
 
     if (ticket){
-        const data = await ticketDAO.updateTicketStatus(ticket, status.toLowerCase());
-        logger.info(`Success | ticketService | approveTicket | Ticket: ${JSON.stringify(data)}`);
+        const data = await ticketDAO.updateTicketStatus(ticket, status);
+        logger.info(`Success | ticketService | approveTicket | Ticket: ${data}`);
         return data
     }
     else {
