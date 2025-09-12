@@ -96,8 +96,8 @@ async function updateTicketStatus(ticket_id, status){
     const ticket = data.Items[0];
 
     if (ticket){
-        const data = await ticketDAO.updateTicketStatus(ticket, status);
-        logger.info(`Success | ticketService | approveTicket | Ticket: ${data}`);
+        const data = await ticketDAO.updateTicketStatus(ticket, status.toLowerCase());
+        logger.info(`Success | ticketService | approveTicket | Ticket: ${JSON.stringify(data)}`);
         return data
     }
     else {

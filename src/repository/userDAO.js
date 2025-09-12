@@ -28,8 +28,8 @@ async function createUser(user){
 
     try{
         const data = await documentClient.send(command);
-        logger.info(`PUT command complete in userDAO | createUser | data: ${JSON.stringify(data)}`);
-        return data;
+        logger.info(`PUT command complete in userDAO | createUser | data: ${JSON.stringify(user)}`);
+        return user;
     }
     catch (err) {
         logger.error(`Error in userDAO | createUser | Error: ${err}`);

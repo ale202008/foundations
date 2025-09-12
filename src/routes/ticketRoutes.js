@@ -12,14 +12,14 @@ const router = express.Router();
 router.use(authenticateToken);
 
 // Protected route -> Employee user trying to create a ticket.
-router.post("/submitticket", ticketController.SubmitTicket)
+router.post("/tickets", ticketController.SubmitTicket)
 
 // Protected route -> Two options
 // If employee -> See current pending tickets made by user
 // If manager -> See all currently pending tickets
-router.get("/viewtickets", ticketController.ViewTickets);
+router.get("/tickets", ticketController.Tickets);
 
 // Protected route -> body carries status to change on ticket
-router.patch("/ticket/:ticket_id", ticketController.UpdateTicketStatus)
+router.patch("/tickets/:ticket_id", ticketController.UpdateTicketStatus)
 
 module.exports = router;

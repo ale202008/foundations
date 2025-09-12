@@ -11,10 +11,10 @@ const Register = async (req, res) => {
         const data = await userService.createUser(req.body);
         
         if (data){
-            res.status(200).json({message: `Created user: ${req.body.username}`});
+            res.status(200).json({message: `Created ${data.role}: ${data.username}`});
         }
         else {
-            res.status(400).json({message:`Username ${req.body.username} already exists.`});
+            res.status(400).json({message:`Username ${data.username} already exists.`});
         }
     }
     else {

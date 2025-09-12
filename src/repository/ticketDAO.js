@@ -108,11 +108,11 @@ async function updateTicketStatus(ticket, status){
 
     try {
         const data = await documentClient.send(command);
-        logger.info(`UPDATE command complete | approveTicket | data: ${data.Items[0]}`);
-        return data
+        logger.info(`UPDATE command complete | updateTicketStatus | data: ${JSON.stringify(data.Attributes)}`);
+        return data.Attributes
     }
     catch (err) {
-        logger.error(`Error in ticketDAO | approveTicket | Error: ${err}`);
+        logger.error(`Error in ticketDAO | updateTicketStatus | Error: ${err}`);
         return null;
     }
 }

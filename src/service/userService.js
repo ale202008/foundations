@@ -16,7 +16,7 @@ async function createUser(user){
     }
 
     const saltRounds = 10;
-    if (validateNewUserCredentials(user)){
+    if (validateUserCredentials(user)){
         // Encrypts user's password to record in database
         const password = await bcrypt.hash(user.password, saltRounds);
         const newUser = {
@@ -26,12 +26,12 @@ async function createUser(user){
             role: user.role || "employee"
         };
         const data = await userDAO.createUser(newUser);
-        logger.info(`Created new user | userService | createUser | data: ${data}`)
-        return data
+        logger.info(`Created new user | userService | createUser | data: ${JSON.stringify(data)}`);
+        return data;
     }
     else{
         logger.error(`Invalid username or password | userService | User: ${user}`);
-        return null
+        return null;
     }
 
 }
