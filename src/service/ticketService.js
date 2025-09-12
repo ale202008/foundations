@@ -22,10 +22,12 @@ async function createTicket(ticket, token){
         return null;
     }
 
+    const user = getUserByToken(token);
+
     ticket["ticket_id"] = uuid.v4();
     ticket["pending"] = true;
-    const decodedUser = await decodeJWT(token);
-    ticket["user_id"] = decodedUser.id;
+    ticket["user_id"] = user.user_id;
+
     const data = await ticketDAO.createTicket(ticket);
     
     if (data){
@@ -46,10 +48,9 @@ async function createTicket(ticket, token){
 // args: user_id
 // return: data containing all user tickets
 async function getTicketsByUserId(token){
-    const decodedUser = await decodeJWT(token);
-    const user_id = decodedUser.id;
+    const user = getUserByToken(token);
 
-    const data = await ticketDAO.getTicketsByUserId(user_id)
+    const data = await ticketDAO.getTicketsByUserId(user.user_id)
 
     if (data){
         logger.info(`Success | ticketService | getTicketsByUserId | Tickets: ${data.Items}`);
@@ -67,8 +68,7 @@ async function getTicketsByUserId(token){
 // args: token
 // return: all pending tickets object
 async function getAllPendingTickets(token){
-    const decodedUser = await decodeJWT(token);
-    const user = userDAO.getUserByID(decodedUser.id);
+    const user = getUserByToken(token);
 
     if (validifyUserIsManager(user)){
         logger.info(`Success | ticketService | getAllPendingTickets | Tickets: ${data.Items}`);
@@ -104,8 +104,18 @@ function validifyUserIsManager(user){
     return (user.role.toLowerCase() == "manager");
 }
 
+// function that decodes user from token, getting user
+async function getUserByToken(token){
+    const decodedUser = await decodeJWT(token);
+    const user = userDAO.getUserByID(decodedUser.id);
+    return user;
+}
+
 module.exports = {
     createTicket,
     getTicketsByUserId,
     getAllPendingTickets,
+    validifyUserIsManager,
+    validifyUserIsEmployee,
+    getUserByToken
 }
