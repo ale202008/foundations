@@ -87,6 +87,11 @@ async function getAllPendingTickets(token){
 // args: ticket_id
 // return: data
 async function approveTicket(ticket_id){
+    if (!validifyUserIsManager){
+        logger.error("User is not a manager.")
+        return null;
+    }
+
     const ticket = await getTicketById(ticket_id);
 
     if (ticket){
