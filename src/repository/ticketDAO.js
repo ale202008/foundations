@@ -91,7 +91,10 @@ async function getAllPendingTickets(){
 async function approveTicket(ticket){
     const params = {
         TableName,
-        Key: {ticket_id: ticket.ticket_id},
+        Key: {
+            user_id: ticket.user_id,
+            ticket_id: ticket.ticket_id
+        },
         UpdateExpression: "SET #approved = if_not_exists(#approved, :approved)",
         ExpressionAttributeNames: {
             "#approved": "approved",
@@ -104,7 +107,7 @@ async function approveTicket(ticket){
     const command = new UpdateCommand(params);
 
     try {
-        const data = new documentClient.send(command);
+        const data = documentClient.send(command);
         logger.info(`UPDATE command complete | approveTicket | data: ${data.Items}`);
         return data
     }
@@ -113,6 +116,7 @@ async function approveTicket(ticket){
         return null;
     }
 }
+
 
 // denyTicket
 // args: ticket_id, user_id
