@@ -107,8 +107,8 @@ async function updateTicketStatus(ticket, status){
     const command = new UpdateCommand(params);
 
     try {
-        const data = documentClient.send(command);
-        logger.info(`UPDATE command complete | approveTicket | data: ${data.Items}`);
+        const data = await documentClient.send(command);
+        logger.info(`UPDATE command complete | approveTicket | data: ${data.Items[0]}`);
         return data
     }
     catch (err) {
@@ -134,7 +134,7 @@ async function getTicketById(ticket_id){
     const command = new ScanCommand(params);
 
     try {
-        const data = documentClient.send(command);
+        const data = await documentClient.send(command);
         logger.info(`SCAN command success | getTicketById | data: ${data}`);
         return data;
     }

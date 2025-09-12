@@ -19,4 +19,7 @@ router.post("/submitticket", ticketController.SubmitTicket)
 // If manager -> See all currently pending tickets
 router.get("/viewtickets", ticketController.ViewTickets);
 
+// Protected route -> body carries status to change on ticket
+router.patch("/ticket/:ticket_id", ticketController.UpdateTicketStatus)
+
 module.exports = router;

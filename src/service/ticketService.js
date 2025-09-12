@@ -92,7 +92,8 @@ async function updateTicketStatus(ticket_id, status){
         return null;
     }
 
-    const ticket = await getTicketById(ticket_id);
+    const data = await getTicketById(ticket_id);
+    const ticket = data.Items[0];
 
     if (ticket){
         const data = await ticketDAO.updateTicketStatus(ticket, status);

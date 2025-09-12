@@ -52,10 +52,10 @@ const UpdateTicketStatus = async (req, res) => {
     const data = await ticketService.updateTicketStatus(ticket_id, req.body.status);
 
     if (data){
-        res.status(200).json({message: `Ticket: ${ticketService} status is ${req.body.status}`});
+        res.status(200).json({message: `Ticket: ${ticket_id} status is ${req.body.status}`});
     }
     else {
-        res.status(400).sjon({message:`Failed to update status.`});
+        res.status(400).json({message:`Failed to update status.`});
     }
 }
 
