@@ -100,7 +100,7 @@ async function updateTicketStatus(ticket_id, status){
         return data
     }
     else {
-        logger.error(`Failed | ticketService | approveTicket `);
+        logger.error(`Failed | invalid Ticket ID | ticketService | approveTicket `);
         return null;
     }
 }

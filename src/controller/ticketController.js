@@ -42,9 +42,20 @@ const ViewTickets = async (req, res) => {
 
 // ViewTicket -> UpdateTicketStatus -> Service
 const UpdateTicketStatus = async (req, res) => {
-    if (req.url.startsWith("/ticket")){
-        const ticket_id = req.url.split("/")[2];
+    if (!req.url.startsWith("/ticket")){
+        logger.error(`Invalid url for route | No Ticket Id | URL: ${req.url}`);
+        res.status(400).json({message:`How did you get here?`, data: req.body});
+    }
 
+    const ticket_id = req.url.split("/")[2];
+    
+    const data = await ticketService.updateTicketStatus(ticket_id, req.body.status);
+
+    if (data){
+        res.status(200).json({message: `Ticket: ${ticketService} status is ${req.body.status}`});
+    }
+    else {
+        res.status(400).sjon({message:`Failed to update status.`});
     }
 }
 
