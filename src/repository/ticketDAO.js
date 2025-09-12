@@ -53,7 +53,7 @@ async function getTicketsByUserId(user_id){
         return data;
     }
     catch (err){
-        logger.error(`Error in tickDAO | getTicketsByUserId | Error ${err}`);
+        logger.error(`Error in ticketDAO | getTicketsByUserId | Error: ${err}`);
         return null;
     };
 }
@@ -61,6 +61,29 @@ async function getTicketsByUserId(user_id){
 // getAllPendingTickets function
 // args: none
 // return: list of all currently pending tickets
+async function getAllPendingTickets(){
+    const params = {
+        TableName,
+        FilterExpression: "#pending = :pending",
+        ExpressionAttributeNames: {
+            "#pending": "pending",
+        },
+        ExpressionAttributeValues: {
+            ":pending": true,
+        },
+    };
+    const command = new ScanCommand(params)
+
+    try {
+        const data = await documentClient.send(command);
+        logger.info(`SCAN command compelete | ticketDAO | getAllPendingTickets | data: ${data}`);
+        return data;
+    }
+    catch (err) {
+        logger.error(`Error in ticketDAO | getAllPendingTickets | Error: ${err}`);
+        return null;
+    }
+}
 
 // approveTicket
 // args: ticket
