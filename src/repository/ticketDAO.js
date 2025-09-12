@@ -88,6 +88,31 @@ async function getAllPendingTickets(){
 // approveTicket
 // args: ticket
 // return: ticket, with approved field true
+async function approveTicket(ticket){
+    const params = {
+        TableName,
+        Key: {ticket_id: ticket.ticket_id},
+        UpdateExpression: "SET #approved = if_not_exists(#approved, :approved)",
+        ExpressionAttributeNames: {
+            "#approved": "approved",
+        },
+        ExpressionAttributeValues: {
+            ":approved": true,
+        },
+        ReturnValues: "ALL_NEW"
+    };
+    const command = new UpdateCommand(params);
+
+    try {
+        const data = new documentClient.send(command);
+        logger.info(`UPDATE command complete | approveTicket | data: ${data.Items}`);
+        return data
+    }
+    catch (err) {
+        logger.error(`Error in ticketDAO | approveTicket | Error: ${err}`);
+        return null;
+    }
+}
 
 // denyTicket
 // args: ticket_id, user_id
