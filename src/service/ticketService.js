@@ -82,6 +82,14 @@ async function getAllPendingTickets(token){
 
 }
 
+// approveTicket, aproves ticket
+// if user is a manager
+// args: ticket_id
+// return: data
+async function approveTicket(ticket_id){
+
+}
+
 // validifiy ticket requiremnest
 // - Amount, Description
 // args: ticket

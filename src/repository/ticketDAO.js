@@ -119,7 +119,6 @@ async function approveTicket(ticket){
     }
 }
 
-
 // denyTicket
 // args: ticket_id, user_id
 // return: ticket, with approved field false
@@ -154,8 +153,39 @@ async function denyTicket(ticket){
     }
 }
 
+// getTicketUserId, function to get the ticket associated with ticket_id
+// args: ticket_id
+// return: ticket
+async function getTicketById(ticket_id){
+    const params = {
+        TableName,
+        FilterExpression: "#ticket_id = :ticket_id",
+        ExpressionAttributeNames: {
+            "#ticket_id": "ticket_id",
+        },
+        ExpressionAttributeValues: {
+            ":ticket_id": ticket_id,
+        },
+    };
+    const command = new ScanCommand(params);
+
+    try {
+        const data = documentClient.send(command);
+        logger.info(`SCAN command success | getTicketById | data: ${data}`);
+        return data;
+    }
+    catch (err){
+        logger.error(`Error in ticketDAO | getTicketById | Error: ${err}`);
+        return null;
+    }
+
+}
+
 module.exports = {
     createTicket,
     getTicketsByUserId,
     getAllPendingTickets,
+    approveTicket,
+    denyTicket,
+    getTicketById,
 }
