@@ -64,12 +64,12 @@ async function getTicketsByUserId(user_id){
 async function getAllPendingTickets(){
     const params = {
         TableName,
-        FilterExpression: "#pending = :pending",
+        FilterExpression: "#status = :status",
         ExpressionAttributeNames: {
-            "#pending": "pending",
+            "#status": "status",
         },
         ExpressionAttributeValues: {
-            ":pending": true,
+            ":status": "pending",
         },
     };
     const command = new ScanCommand(params)
@@ -85,24 +85,22 @@ async function getAllPendingTickets(){
     }
 }
 
-// approveTicket
-// args: ticket
-// return: ticket, with approved field true
-async function approveTicket(ticket){
+// updateTicketStatus function
+// args: ticket, desired status
+// return: ticket, with updated status
+async function updateTicketStatus(ticket, status){
     const params = {
         TableName,
         Key: {
             user_id: ticket.user_id,
             ticket_id: ticket.ticket_id
         },
-        UpdateExpression: "SET #approved = if_not_exists(#approved, :approved), #pending = :pending",
+        UpdateExpression: "SET #status = :status",
         ExpressionAttributeNames: {
-            "#approved": "approved",
-            "#pending": "pending",
+            "#status": "status",
         },
         ExpressionAttributeValues: {
-            ":approved": true,
-            ":pending": false,
+            ":status": status
         },
         ReturnValues: "ALL_NEW"
     };
@@ -115,40 +113,6 @@ async function approveTicket(ticket){
     }
     catch (err) {
         logger.error(`Error in ticketDAO | approveTicket | Error: ${err}`);
-        return null;
-    }
-}
-
-// denyTicket
-// args: ticket_id, user_id
-// return: ticket, with approved field false
-async function denyTicket(ticket){
-    const params = {
-        TableName,
-        Key: {
-            user_id: ticket.user_id,
-            ticket_id: ticket.ticket_id
-        },
-        UpdateExpression: "SET #approved = if_not_exists(#approved, :approved), #pending = :pending",
-        ExpressionAttributeNames: {
-            "#approved": "approved",
-            "#pending": "pending",
-        },
-        ExpressionAttributeValues: {
-            ":approved": false,
-            ":pending": false,
-        },
-        ReturnValues: "ALL_NEW"
-    };
-    const command = new UpdateCommand(params);
-
-    try {
-        const data = documentClient.send(command);
-        logger.info(`UPDATE command complete | denyTicket | data: ${data}`);
-        return data
-    }
-    catch (err) {
-        logger.error(`Error in ticketDAO | denyTicket | Error: ${err}`);
         return null;
     }
 }
@@ -185,7 +149,6 @@ module.exports = {
     createTicket,
     getTicketsByUserId,
     getAllPendingTickets,
-    approveTicket,
-    denyTicket,
     getTicketById,
+    updateTicketStatus,
 }

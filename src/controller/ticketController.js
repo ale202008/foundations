@@ -18,7 +18,7 @@ const ViewTickets = async (req, res) => {
     const user_role = (await ticketService.getUserByToken(req.token)).role
 
     if (user_role == "employee"){
-        const data = await ticketService.getTicketsByUserId(token);
+        const data = await ticketService.getTicketsByUserId(req.token);
 
         if (data){
             res.status(200).json({message: `Your tickets: `, tickets: data.Items});
@@ -28,7 +28,7 @@ const ViewTickets = async (req, res) => {
         }
     }
     else if (user_role == "manager") {
-        const data = await ticketService.getAllPendingTickets(token);
+        const data = await ticketService.getAllPendingTickets(req.token);
 
         if (data){
             res.status(200).json({message: `${data.Items.length} pending tickets: `, tickets: data.Items});
@@ -40,13 +40,16 @@ const ViewTickets = async (req, res) => {
 
 }
 
-// ViewTicket -> ApproveTicket -> Service
-const ApproveTicket = async (req, res) => {
-    
+// ViewTicket -> UpdateTicketStatus -> Service
+const UpdateTicketStatus = async (req, res) => {
+    if (req.url.startsWith("/ticket")){
+        const ticket_id = req.url.split("/")[2];
+
+    }
 }
 
 module.exports = {
     SubmitTicket,
     ViewTickets,
-    ApproveTicket,
+    UpdateTicketStatus,
 }

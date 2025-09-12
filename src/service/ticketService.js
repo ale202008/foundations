@@ -25,7 +25,7 @@ async function createTicket(ticket, token){
     const user = await getUserByToken(token);
 
     ticket["ticket_id"] = uuid.v4();
-    ticket["pending"] = true;
+    ticket["status"] = "pending";
     ticket["user_id"] = user.user_id;
 
     const data = await ticketDAO.createTicket(ticket);
@@ -86,8 +86,8 @@ async function getAllPendingTickets(token){
 // if user is a manager
 // args: ticket_id
 // return: data
-async function approveTicket(ticket_id){
-    if (!validifyUserIsManager){
+async function updateTicketStatus(ticket_id, status){
+    if (!validifyUserIsManager){    
         logger.error("User is not a manager.")
         return null;
     }
@@ -95,7 +95,7 @@ async function approveTicket(ticket_id){
     const ticket = await getTicketById(ticket_id);
 
     if (ticket){
-        const data = await ticketDAO.approveTicket(ticket);
+        const data = await ticketDAO.updateTicketStatus(ticket, status);
         logger.info(`Success | ticketService | approveTicket | Ticket: ${data}`);
         return data
     }
@@ -146,5 +146,5 @@ module.exports = {
     validifyUserIsManager,
     validifyUserIsEmployee,
     getUserByToken,
-    approveTicket,
+    updateTicketStatus,
 }
