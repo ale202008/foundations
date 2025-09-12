@@ -87,7 +87,8 @@ async function getAllPendingTickets(token){
 // args: ticket_id
 // return: data
 async function approveTicket(ticket_id){
-
+    const ticket = await getTicketById(ticket_id);
+    
 }
 
 // validifiy ticket requiremnest
@@ -117,6 +118,11 @@ async function getUserByToken(token){
     const decodedUser = await decodeJWT(token);
     const user = await userDAO.getUserByID(decodedUser.id);
     return user;
+}
+
+// handler function that gets ticket by its id
+async function getTicketById(ticket_id){
+    return await ticketDAO.getTicketById(ticket_id);
 }
 
 module.exports = {
