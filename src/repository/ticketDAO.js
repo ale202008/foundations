@@ -26,7 +26,7 @@ async function createTicket(ticket){
 
     try{
         const data = await documentClient.send(command);
-        logger.info(`UPDATE command complete | ticketDAO | createTicket | ticket: ${ticket}`);
+        logger.info(`UPDATE command complete | ticketDAO | createTicket | Ticket: ${JSON.stringify(ticket)}`);
         return data;
     }
     catch (err) {

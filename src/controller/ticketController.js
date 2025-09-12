@@ -6,7 +6,7 @@ const SubmitTicket = async (req, res) => {
     const data = await ticketService.createTicket(req.body, req.token);
     
     if (data){
-        res.status(200).json({message: `Created new ticket for user: `, ticket: data});
+        res.status(200).json({message: `Created new ticket.`, ticket: data});
     }
     else {
         res.status(400).json({message:`Failed to create new ticket`, data: req.body});

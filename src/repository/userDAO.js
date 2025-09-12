@@ -50,7 +50,7 @@ async function getUserByID(user_id){
     try{
         const data = await documentClient.send(command);
         logger.info(`GET command complete in userDAO | getUserById | data: ${JSON.stringify(data)}`);
-        return data.Item;
+        return data;
     }catch(err){
         logger.error(`Error in userDAO | getUserById | Error: ${err}`);
         return null;

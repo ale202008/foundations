@@ -13,32 +13,32 @@ const { decodeJWT } = require("../util/jwt");
 // return: null on invalid ticket or token
 // return: data of ticket upon success
 async function createTicket(ticket, token){
-    if (!validifyTicket) {
-        logger.error(`Invalid ticket: ${ticket}`);
-        return null;
-    }
-    else if (!validifyUserIsEmployee){
+    if (!validifyUserIsEmployee(await getUserByToken(token))) {
         logger.error(`User is not an employee.`);
         return null;
     }
-
-    const user = await getUserByToken(token);
-
-    ticket["ticket_id"] = uuid.v4();
-    ticket["status"] = "pending";
-    ticket["user_id"] = user.user_id;
-
-    const data = await ticketDAO.createTicket(ticket);
-    
-    if (data){
-        logger.info(`Successful ticket creation | ticketService | createTicket | Ticket: ${ticket}`);
-        return ticket;
-    }
-    else {
-        logger.error(`Failed to create ticket | ticketService | createTicket`);
+    else if (!validifyTicket(ticket)){
+        logger.error(`Invalid amount or description. Ticket: ${JSON.stringify(ticket)}`);
         return null;
     }
+    else{
+        const user = await getUserByToken(token);
 
+        ticket["ticket_id"] = uuid.v4();
+        ticket["status"] = "pending";
+        ticket["user_id"] = user.user_id;
+
+        const data = await ticketDAO.createTicket(ticket);
+        
+        if (data){
+            logger.info(`Successful ticket creation | ticketService | createTicket | Ticket: ${JSON.stringify(ticket)}`);
+            return ticket;
+        }
+        else {
+            logger.error(`Failed to create ticket | ticketService | createTicket`);
+            return null;
+        }
+    }
 }
 
 // getTicketsByUserId function
@@ -111,7 +111,7 @@ async function updateTicketStatus(ticket_id, status){
 // args: ticket
 // return: true if both amount and description exist, false if not
 function validifyTicket(ticket){
-    return (!ticket.amount.length > 0 || !ticket.description.length > 0)
+    return (ticket.amount != null && ticket.amount >= 0 && ticket.description.trim().length > 0);
 }
 
 // validify user is an employee
@@ -131,8 +131,8 @@ function validifyUserIsManager(user){
 // function that decodes user from token, getting user
 async function getUserByToken(token){
     const decodedUser = await decodeJWT(token);
-    const user = await userDAO.getUserByID(decodedUser.id);
-    return user;
+    const data = await userDAO.getUserByID(decodedUser.id);
+    return data.Item;
 }
 
 // handler function that gets ticket by its id
