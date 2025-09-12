@@ -20,10 +20,11 @@ const TableName = "foundations_table";
 // args: user
 // return: data on success, null if not
 async function createUser(user){
-    const command = new PutCommand({
+    const params = {
         TableName,
         Item: user
-    })
+    };
+    const command = new PutCommand(params)
 
     try{
         const data = await documentClient.send(command);
@@ -40,10 +41,12 @@ async function createUser(user){
 // args: user_id
 // return: data on success, null if not
 async function getUserByID(user_id){
-    const command = new GetCommand({
+    const params = {
         TableName,
         Key: { user_id: user_id }
-    });
+    };
+    const command = new GetCommand(params);
+
     try{
         const data = await documentClient.send(command);
         logger.info(`GET command complete in userDAO | getUserById | data: ${JSON.stringify(data)}`);
@@ -75,7 +78,7 @@ async function updateUser(user){
             ":tickets": user.tickets
         },
         ReturnValues: "ALL_NEW"  
-    }
+    };
     const command = new UpdateCommand(params)
     
     try {
@@ -93,10 +96,11 @@ async function updateUser(user){
 // args: user_id
 // return: user_id on success, null if not
 async function deleteUserByID(user_id){
-    const command = new DeleteCommand({
+    const params = {
         TableName,
         Key: { user_id }
-    });
+    };
+    const command = new DeleteCommand(params);
 
     try{
         await documentClient.send(command);
@@ -112,16 +116,17 @@ async function deleteUserByID(user_id){
 // args: username
 // return: data on success, null if not
 async function getUserByUsername(username){
-    const command = new ScanCommand({
+    const params = {
         TableName,
         FilterExpression: "#username = :username",
         ExpressionAttributeNames: {"#username": "username"},
         ExpressionAttributeValues: {":username": username}
-    });
+    };
+    const command = new ScanCommand(params);
 
     try{
         const data = await documentClient.send(command);
-        logger.info(`SCAN command complete | userDAO | getUserByUsername | data: ${JSON.stringify(data)}`);
+        logger.info(`SCAN command complete | userDAO | getUserByUsername | data: ${JSON.stringify(data.Items[0])}`);
         return data.Items[0];
     }catch(err){
         logger.error(`Error in userDAO | getUserByUsername | Error: ${err}`);

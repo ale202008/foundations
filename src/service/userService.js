@@ -11,7 +11,7 @@ const userDAO = require("../repository/userDAO");
 // returns: data on success, null if not
 async function createUser(user){
     if (await validateNewUser(user)){
-        logger.error(`Username already exists. User: ${user}`);
+        logger.error(`Username already exists.`);
         return null;
     }
 
@@ -26,11 +26,11 @@ async function createUser(user){
             role: user.role || "employee"
         };
         const data = await userDAO.createUser(newUser);
-        logger.info(`Created new user in userService | createUser | data: ${data}`)
+        logger.info(`Created new user | userService | createUser | data: ${data}`)
         return data
     }
     else{
-        logger.error(`Failed to validate user credentials. User: ${user}`);
+        logger.error(`Invalid username or password | userService | User: ${user}`);
         return null
     }
 
