@@ -20,7 +20,7 @@ const SubmitTicket = async (req, res) => {
 const ViewTickets = async (req, res) => {
     const authHeader = req.headers["authorization"];
     const token = authHeader && authHeader.split(" ")[1];
-    const user_role = ticketService.getUserByToken(token).role
+    const user_role = (await ticketService.getUserByToken(token)).role
 
     if (user_role == "employee"){
         const data = await ticketService.getTicketsByUserId(token);
@@ -33,10 +33,10 @@ const ViewTickets = async (req, res) => {
         }
     }
     else if (user_role == "manager") {
-        const data = await ticketService.getAllPendingTickets();
+        const data = await ticketService.getAllPendingTickets(token);
 
         if (data){
-            res.status(200).json({message: `All pending tickets: `, tickets: data.Items});
+            res.status(200).json({message: `${data.Items.length} pending tickets: `, tickets: data.Items});
         }
         else {
             res.status(400).json({message:`Failed to retrieve tickets.`, data: req.body});

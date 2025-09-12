@@ -22,7 +22,7 @@ async function createTicket(ticket, token){
         return null;
     }
 
-    const user = getUserByToken(token);
+    const user = await getUserByToken(token);
 
     ticket["ticket_id"] = uuid.v4();
     ticket["pending"] = true;
@@ -48,7 +48,7 @@ async function createTicket(ticket, token){
 // args: user_id
 // return: data containing all user tickets
 async function getTicketsByUserId(token){
-    const user = getUserByToken(token);
+    const user = await getUserByToken(token);
 
     const data = await ticketDAO.getTicketsByUserId(user.user_id)
 
@@ -68,11 +68,11 @@ async function getTicketsByUserId(token){
 // args: token
 // return: all pending tickets object
 async function getAllPendingTickets(token){
-    const user = getUserByToken(token);
+    const user = await getUserByToken(token);
 
     if (validifyUserIsManager(user)){
-        logger.info(`Success | ticketService | getAllPendingTickets | Tickets: ${data.Items}`);
         const data = await ticketDAO.getAllPendingTickets();
+        logger.info(`Success | ticketService | getAllPendingTickets | Tickets: ${data.Items}`);
         return data;
     }
     else{
@@ -107,7 +107,7 @@ function validifyUserIsManager(user){
 // function that decodes user from token, getting user
 async function getUserByToken(token){
     const decodedUser = await decodeJWT(token);
-    const user = userDAO.getUserByID(decodedUser.id);
+    const user = await userDAO.getUserByID(decodedUser.id);
     return user;
 }
 
