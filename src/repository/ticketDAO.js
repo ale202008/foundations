@@ -121,6 +121,34 @@ async function approveTicket(ticket){
 // denyTicket
 // args: ticket_id, user_id
 // return: ticket, with approved field false
+async function denyTicket(ticket){
+    const params = {
+        TableName,
+        Key: {
+            user_id: ticket.user_id,
+            ticket_id: ticket.ticket_id
+        },
+        UpdateExpression: "SET #approved = if_not_exists(#approved, :approved)",
+        ExpressionAttributeNames: {
+            "#approved": "approved",
+        },
+        ExpressionAttributeValues: {
+            ":approved": false,
+        },
+        ReturnValues: "ALL_NEW"
+    };
+    const command = new UpdateCommand(params);
+
+    try {
+        const data = documentClient.send(command);
+        logger.info(`UPDATE command complete | denyTicket | data: ${data.Items}`);
+        return data
+    }
+    catch (err) {
+        logger.error(`Error in ticketDAO | denyTicket | Error: ${err}`);
+        return null;
+    }
+}
 
 module.exports = {
     createTicket,
