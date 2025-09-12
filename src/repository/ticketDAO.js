@@ -96,4 +96,5 @@ async function getAllPendingTickets(){
 module.exports = {
     createTicket,
     getTicketsByUserId,
+    getAllPendingTickets,
 }

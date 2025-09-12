@@ -61,6 +61,27 @@ async function getTicketsByUserId(token){
     }
 }
 
+// getAllPendingTickets
+// Requests from repository to get all current pending tickets.
+// Can only be done if user is manager
+// args: token
+// return: all pending tickets object
+async function getAllPendingTickets(token){
+    const decodedUser = await decodeJWT(token);
+    const user = userDAO.getUserByID(decodedUser.id);
+
+    if (validifyUserIsManager(user)){
+        logger.info(`Success | ticketService | getAllPendingTickets | Tickets: ${data.Items}`);
+        const data = await ticketDAO.getAllPendingTickets();
+        return data;
+    }
+    else{
+        logger.error(`Failed | ticketService | getAllPendingTickets`);
+        return null;
+    }
+
+}
+
 // validifiy ticket requiremnest
 // - Amount, Description
 // args: ticket
@@ -73,10 +94,18 @@ function validifyTicket(ticket){
 // args: user
 // return: true if user is an employee, false if not
 function validifyUserIsEmployee(user){
-    return (user.role.toLowerCase() == "employee")
+    return (user.role.toLowerCase() == "employee");
+}
+
+// validify user is a manager
+// args: user
+// return true if user is a manager, false if not
+function validifyUserIsManager(user){
+    return (user.role.toLowerCase() == "manager");
 }
 
 module.exports = {
     createTicket,
     getTicketsByUserId,
+    getAllPendingTickets,
 }
