@@ -15,6 +15,7 @@ async function authenticateToken(req, res, next){
         const user = await decodeJWT(token);
         if(user){
             req.user = user; // You generally should not modify the incoming req
+            req.token = token;
             logger.info(`Successful access protected route.`)
             next();
         }else{

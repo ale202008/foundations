@@ -3,10 +3,7 @@ const ticketService = require("../service/ticketService")
 
 // Submit Ticket Route -> Service
 const SubmitTicket = async (req, res) => {
-    const authHeader = req.headers["authorization"];
-    const token = authHeader && authHeader.split(" ")[1];
-
-    const data = await ticketService.createTicket(req.body, token);
+    const data = await ticketService.createTicket(req.body, req.token);
     
     if (data){
         res.status(200).json({message: `Created new ticket for user: `, ticket: data});
@@ -18,9 +15,7 @@ const SubmitTicket = async (req, res) => {
 
 // View Ticket Route -> Service
 const ViewTickets = async (req, res) => {
-    const authHeader = req.headers["authorization"];
-    const token = authHeader && authHeader.split(" ")[1];
-    const user_role = (await ticketService.getUserByToken(token)).role
+    const user_role = (await ticketService.getUserByToken(req.token)).role
 
     if (user_role == "employee"){
         const data = await ticketService.getTicketsByUserId(token);
@@ -45,7 +40,13 @@ const ViewTickets = async (req, res) => {
 
 }
 
+// ViewTicket -> ApproveTicket -> Service
+const ApproveTicket = async (req, res) => {
+    
+}
+
 module.exports = {
     SubmitTicket,
     ViewTickets,
+    ApproveTicket,
 }
