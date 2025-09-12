@@ -95,7 +95,7 @@ async function updateTicketStatus(ticket_id, status){
     const data = await getTicketById(ticket_id);
     const ticket = data.Items[0];
 
-    if (ticket){
+    if (ticket && await isPending(ticket)){
         const data = await ticketDAO.updateTicketStatus(ticket, status);
         logger.info(`Success | ticketService | approveTicket | Ticket: ${data}`);
         return data
@@ -138,6 +138,11 @@ async function getUserByToken(token){
 // handler function that gets ticket by its id
 async function getTicketById(ticket_id){
     return await ticketDAO.getTicketById(ticket_id);
+}
+
+// handler function that confirms ticket is still pending, unprocessed
+async function isPending(ticket){
+    return (ticket.status == "pending");
 }
 
 module.exports = {
