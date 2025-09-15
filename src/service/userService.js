@@ -39,12 +39,12 @@ async function createUser(user){
 // args: username, password
 // return: user login, null if not
 async function validateUserLogin(username, password) {
-    const getUser = await userDAO.getUserByUsername(username);
+    const user = await userDAO.getUserByUsername(username);
 
 
-    if (getUser && (await bcrypt.compare(password, getUser.password))){
-        logger.info(`User ${username} successfully logged in.`);
-        return getUser;
+    if (user && (await bcrypt.compare(password, user.password))){
+        logger.info(`User ${user.username} successfully logged in.`);
+        return user;
     }
     else {
         logger.info(`Invalid username or password`);
