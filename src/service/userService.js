@@ -33,7 +33,6 @@ async function createUser(user){
         logger.error(`Invalid username or password | userService | User: ${user}`);
         return null;
     }
-
 }
 
 // Validates user login information
