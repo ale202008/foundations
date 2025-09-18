@@ -38,14 +38,34 @@ async function createTicket(ticket){
 // getTicketByUserId function
 // args: user_id
 // return: list of all user's tickets
-async function getTicketsByUserId(user_id){
-    const command = new QueryCommand({
-        TableName,
-        KeyConditionExpression: "user_id = :user_id",
-        ExpressionAttributeValues: {
-            ":user_id": user_id
+async function getTicketsByUserId(user_id, status){
+    let params;
+
+    if (status){
+        params = {
+            TableName,
+            KeyConditionExpression: "user_id = :user_id",
+            FilterExpression: "#status = :status",
+            ExpressionAttributeNames: {
+                "#status": "status",
+            },
+            ExpressionAttributeValues: {
+                ":user_id": user_id,
+                ":status": status,
+            },
         }
-    });
+    }
+    else {
+        params = {
+            TableName,
+            KeyConditionExpression: "user_id = :user_id",
+            ExpressionAttributeValues: {
+                ":user_id": user_id,
+            },
+        }
+    }
+
+    const command = new QueryCommand(params);
     
     try {
         const data = await documentClient.send(command);
@@ -61,26 +81,35 @@ async function getTicketsByUserId(user_id){
 // getAllPendingTickets function
 // args: none
 // return: list of all currently pending tickets
-async function getAllPendingTickets(){
-    const params = {
-        TableName,
-        FilterExpression: "#status = :status",
-        ExpressionAttributeNames: {
-            "#status": "status",
-        },
-        ExpressionAttributeValues: {
-            ":status": "pending",
-        },
-    };
+async function getAllTickets(status){
+    let params;
+    if (status){
+        params = {
+            TableName,
+            FilterExpression: "#status = :status",
+            ExpressionAttributeNames: {
+                "#status": "status",
+            },
+            ExpressionAttributeValues: {
+                ":status": status,
+            },
+        };
+    }
+    else {
+        params = {
+            TableName,
+        }
+    }
+
     const command = new ScanCommand(params)
 
     try {
         const data = await documentClient.send(command);
-        logger.info(`SCAN command compelete | ticketDAO | getAllPendingTickets | data: ${data}`);
+        logger.info(`SCAN command compelete | ticketDAO | getAllTickets | data: ${data}`);
         return data;
     }
     catch (err) {
-        logger.error(`Error in ticketDAO | getAllPendingTickets | Error: ${err}`);
+        logger.error(`Error in ticketDAO | getAllTickets | Error: ${err}`);
         return null;
     }
 }
@@ -100,7 +129,7 @@ async function updateTicketStatus(ticket, status){
             "#status": "status",
         },
         ExpressionAttributeValues: {
-            ":status": status
+            ":status": status.toLowerCase(),
         },
         ReturnValues: "ALL_NEW"
     };
@@ -148,7 +177,7 @@ async function getTicketById(ticket_id){
 module.exports = {
     createTicket,
     getTicketsByUserId,
-    getAllPendingTickets,
+    getAllTickets,
     getTicketById,
     updateTicketStatus,
 }

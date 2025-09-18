@@ -7,6 +7,8 @@ const secretKey = "my-secret-key";
 
 // Register route -> Service
 const Register = async (req, res) => {
+    const { username } = req.body
+
     if (userService.validateUserCredentials(req.body)){
         const data = await userService.createUser(req.body);
         
@@ -14,7 +16,7 @@ const Register = async (req, res) => {
             res.status(200).json({message: `Created ${data.role}: ${data.username}`});
         }
         else {
-            res.status(400).json({message:`Username ${data.username} already exists.`});
+            res.status(400).json({message:`Username ${username} already exists.`});
         }
     }
     else {

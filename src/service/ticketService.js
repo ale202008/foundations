@@ -47,7 +47,7 @@ async function createTicket(ticket, token){
 // if user is manager, send all pending tickets
 // args: user_id
 // return: data containing all user tickets
-async function getTicketsByUserId(token){
+async function getTicketsByUserId(token, status){
     const user = await getUserByToken(token);
 
     if (!user) {
@@ -55,7 +55,7 @@ async function getTicketsByUserId(token){
         return null;
     }
 
-    const data = await ticketDAO.getTicketsByUserId(user.user_id)
+    const data = await ticketDAO.getTicketsByUserId(user.user_id, status)
 
     if (data){
         logger.info(`Success | ticketService | getTicketsByUserId | Tickets: ${data.Items}`);
@@ -72,21 +72,21 @@ async function getTicketsByUserId(token){
 // Can only be done if user is manager
 // args: token
 // return: all pending tickets object
-async function getAllPendingTickets(token){
+async function getAllTickets(token, status){
     const user = await getUserByToken(token);
 
     if (!user) {
-        logger.error(`Failed | ticketService | getAllPendingTickets`);
+        logger.error(`Failed | ticketService | getAllTickets`);
         return null;
     }
 
     if (validifyUserIsManager(user)){
-        const data = await ticketDAO.getAllPendingTickets();
-        logger.info(`Success | ticketService | getAllPendingTickets | Tickets: ${JSON.stringify(data.Items)}`);
+        const data = await ticketDAO.getAllTickets(status);
+        logger.info(`Success | ticketService | getAllTickets | Tickets: ${JSON.stringify(data.Items)}`);
         return data;
     }
     else{
-        logger.error(`Failed | ticketService | getAllPendingTickets`);
+        logger.error(`Failed | ticketService | getAllTickets`);
         return null;
     }
 
@@ -165,7 +165,7 @@ async function isPending(ticket){
 module.exports = {
     createTicket,
     getTicketsByUserId,
-    getAllPendingTickets,
+    getAllTickets,
     validifyUserIsManager,
     validifyUserIsEmployee,
     getUserByToken,
