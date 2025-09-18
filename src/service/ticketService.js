@@ -50,6 +50,11 @@ async function createTicket(ticket, token){
 async function getTicketsByUserId(token){
     const user = await getUserByToken(token);
 
+    if (!user) {
+        logger.error(`Failed | ticketService | getTicketsByUserId`);
+        return null;
+    }
+
     const data = await ticketDAO.getTicketsByUserId(user.user_id)
 
     if (data){
@@ -70,6 +75,11 @@ async function getTicketsByUserId(token){
 async function getAllPendingTickets(token){
     const user = await getUserByToken(token);
 
+    if (!user) {
+        logger.error(`Failed | ticketService | getAllPendingTickets`);
+        return null;
+    }
+
     if (validifyUserIsManager(user)){
         const data = await ticketDAO.getAllPendingTickets();
         logger.info(`Success | ticketService | getAllPendingTickets | Tickets: ${JSON.stringify(data.Items)}`);
@@ -86,8 +96,15 @@ async function getAllPendingTickets(token){
 // if user is a manager
 // args: ticket_id
 // return: data
-async function updateTicketStatus(ticket_id, status){
-    if (!validifyUserIsManager){    
+async function updateTicketStatus(ticket_id, status, token){
+    const user = await getUserByToken(token);
+
+    if (!user){
+        logger.error(`Failed | invalid Ticket ID | ticketService | approveTicket `);
+        return null; 
+    }
+
+    if (!validifyUserIsManager(user)){    
         logger.error("User is not a manager.")
         return null;
     }

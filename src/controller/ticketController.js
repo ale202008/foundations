@@ -64,7 +64,7 @@ const UpdateTicketStatus = async (req, res) => {
     else{
         const ticket_id = req.url.split("/")[2];
     
-        const data = await ticketService.updateTicketStatus(ticket_id, req.body.status);
+        const data = await ticketService.updateTicketStatus(ticket_id, req.body.status, req.token);
 
         if (data){
             res.status(200).json({message: `Ticket: ${ticket_id} status is ${data.status}`});
