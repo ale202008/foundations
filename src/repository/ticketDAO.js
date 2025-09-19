@@ -51,7 +51,7 @@ async function getTicketsByUserId(user_id, status){
             },
             ExpressionAttributeValues: {
                 ":user_id": user_id,
-                ":status": status,
+                ":status": status.toLowerCase(),
             },
         }
     }
@@ -91,7 +91,7 @@ async function getAllTickets(status){
                 "#status": "status",
             },
             ExpressionAttributeValues: {
-                ":status": status,
+                ":status": status.toLowerCase(),
             },
         };
     }
